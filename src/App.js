@@ -1,25 +1,26 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import Container from "./components/Container";
+import { Logo } from "./styled/Logo.styled";
+import logo from "./images/logo.svg";
+import InputColumn from "./components/InputColumn";
+import TotalColumn from "./components/TotalColumn";
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Logo src={logo} alt="Logo" />
+      <Container>
+        <InputColumn />
+        <TotalColumn />
+      </Container>
     </div>
   );
 }
 
 export default App;
+
+// Components:
+// - main container
+// - input column
+//    - tip list + custom tip
+// - total box column
