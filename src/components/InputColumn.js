@@ -11,6 +11,8 @@ const InputColumn = () => {
   const [noOfPeopleInput, setNoOfPeopleInput] = useState("");
   const [currentTip, setCurrentTip] = useState(0);
 
+  // RENAME STATES
+
   // Bill amount input listener
   const billInputListener = (e) => {
     let billInputAmount = parseFloat(e.target.value);
@@ -138,6 +140,7 @@ const InputColumn = () => {
           min="0"
           max="9999"
           onChange={billInputListener}
+          value={billInput}
         />
       </div>
       <div>
@@ -155,6 +158,7 @@ const InputColumn = () => {
             max="100"
             type="number"
             onChange={customTipInputListener}
+            value={customTipInput}
           />
         </StyledTipWrapper>
       </div>
@@ -169,6 +173,7 @@ const InputColumn = () => {
           placeholder="0"
           max="100"
           onChange={noOfPeopleInputListener}
+          value={noOfPeopleInput}
         />
       </div>
     </StyledInputColumn>
