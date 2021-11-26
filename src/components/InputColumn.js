@@ -5,20 +5,18 @@ import {
   StyledTipWrapper,
 } from "../styled/StyledInputColumn.styled";
 
-const InputColumn = () => {
-  const [billInput, setBillInput] = useState("");
-  const [customTipInput, setCustomTipInput] = useState("");
-  const [noOfPeopleInput, setNoOfPeopleInput] = useState("");
+const InputColumn = (props) => {
+  const [billValue, setBillValue] = useState("");
+  const [customTip, setCustomTip] = useState("");
+  const [noOfPeople, setNoOfPeople] = useState("");
   const [currentTip, setCurrentTip] = useState(0);
-
-  // RENAME STATES
 
   // Bill amount input listener
   const billInputListener = (e) => {
     let billInputAmount = parseFloat(e.target.value);
     let billInputAmountString = e.target.value;
     if (billInputAmount === "" || billInputAmount < 0) {
-      setBillInput("");
+      setBillValue("");
     }
 
     // Restore reset button functionality
@@ -28,14 +26,14 @@ const InputColumn = () => {
 
     // Add number limits on inputs
     if (billInputAmount > 9999.99 || billInputAmountString.includes("-")) {
-      billInputAmount = billInput;
+      billInputAmount = billValue;
     }
 
     if (billInputAmountString.includes(".")) {
       let index = billInputAmountString.indexOf(".");
       let calcDecimals = billInputAmountString.length - index;
       if (calcDecimals > 3) {
-        billInputAmount = billInput;
+        billInputAmount = billValue;
       }
     }
 
@@ -47,9 +45,8 @@ const InputColumn = () => {
       billInputAmount = billInputAmountString.replace("0", "");
     }
 
-    setBillInput(billInputAmount);
-    // calculateTip();
-    // calculateTotal();
+    setBillValue(billInputAmount);
+    props.amounts.bill = billValue;
   };
 
   // Custom tip amount listener
@@ -61,7 +58,7 @@ const InputColumn = () => {
     }
 
     if (tipInputAmount < 0 || tipInputAmount === "") {
-      setCustomTipInput(0);
+      setCustomTip(0);
     }
 
     // Restore reset button functionality
@@ -75,7 +72,7 @@ const InputColumn = () => {
       tipInputAmountString.includes("-") ||
       tipInputAmountString.length > 3
     ) {
-      tipInputAmount = customTipInput;
+      tipInputAmount = customTip;
     }
 
     // Adjust current tip value
@@ -91,10 +88,8 @@ const InputColumn = () => {
       tipInputAmount = tipInputAmountString.replace("0", "");
     }
 
-    setCustomTipInput(tipInputAmount);
-
-    // calculateTip();
-    // calculateTotal();
+    setCustomTip(tipInputAmount);
+    props.amounts.tip = currentTip;
   };
 
   // Number of people input listener
@@ -113,7 +108,7 @@ const InputColumn = () => {
       noOfPeopleInputAmountString.includes("-") ||
       noOfPeopleInputAmountString.length > 2
     ) {
-      noOfPeopleInputAmount = noOfPeopleInput;
+      noOfPeopleInputAmount = noOfPeople;
     }
 
     // Prevent number from starting with 0
@@ -124,10 +119,8 @@ const InputColumn = () => {
       noOfPeopleInputAmount = noOfPeopleInputAmountString.replace("0", "");
     }
 
-    setNoOfPeopleInput(noOfPeopleInputAmount);
-
-    // calculateTip();
-    // calculateTotal();
+    setNoOfPeople(noOfPeopleInputAmount);
+    props.amounts.noOfPeople = noOfPeople;
   };
 
   return (
@@ -140,7 +133,7 @@ const InputColumn = () => {
           min="0"
           max="9999"
           onChange={billInputListener}
-          value={billInput}
+          value={billValue}
         />
       </div>
       <div>
@@ -158,13 +151,13 @@ const InputColumn = () => {
             max="100"
             type="number"
             onChange={customTipInputListener}
-            value={customTipInput}
+            value={customTip}
           />
         </StyledTipWrapper>
       </div>
       <div
         className={`people-icon ${
-          noOfPeopleInput === 0 || noOfPeopleInput === "" ? "error-label" : ""
+          noOfPeople === 0 || noOfPeople === "" ? "error-label" : ""
         }`}
       >
         <label>Number of People</label>
@@ -173,7 +166,7 @@ const InputColumn = () => {
           placeholder="0"
           max="100"
           onChange={noOfPeopleInputListener}
-          value={noOfPeopleInput}
+          value={noOfPeople}
         />
       </div>
     </StyledInputColumn>
