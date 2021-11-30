@@ -32,6 +32,7 @@ export const StyledContainer = styled.div`
     width: 80%;
     grid-template-columns: 1fr;
     grid-template-rows: repeat(2, auto);
+    margin-bottom: 3rem;
   }
 
   @media screen and (max-width: 560px) {

@@ -4,7 +4,7 @@ import { Logo } from "./styled/Logo.styled";
 import logo from "./images/logo.svg";
 import InputColumn from "./components/InputColumn";
 import TotalColumn from "./components/TotalColumn";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 function App() {
   const [currentAmounts, setCurrentAmounts] = useState({
@@ -14,30 +14,26 @@ function App() {
   });
 
   const changeCurrAmounts = (amounts) => {
-    setCurrentAmounts({
-      tip: amounts.tip,
-      bill: amounts.bill,
-      noOfPeople: amounts.noOfPeople,
-    });
+    setCurrentAmounts(amounts);
   };
 
-  const btnIsEnabled = () => {
-    if (
-      currentAmounts.tip !== "" &&
-      currentAmounts.bill !== "" &&
-      currentAmounts.noOfPeople !== ""
-    ) {
-      return false;
-    } else {
-      return true;
-    }
+  const btnIsEnabled = (isEnabled) => {
+    // if (isEnabled) {
+    //   return;
+    // } else {
+    //   setCurrentAmounts({
+    //     tip: "",
+    //     bill: "",
+    //     noOfPeople: "",
+    //   });
+    // }
   };
 
   return (
     <div className="App">
       <Logo src={logo} alt="Logo" />
       <Container>
-        <InputColumn amounts={changeCurrAmounts} />
+        <InputColumn amounts={currentAmounts} onAmountChange={changeCurrAmounts} />
         <TotalColumn currAmounts={currentAmounts} isEnabled={btnIsEnabled} />
       </Container>
     </div>

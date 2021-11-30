@@ -42,6 +42,14 @@ export const StyledTotalColumn = styled.div`
     }
   }
 
+  @media screen and (max-width: 820px) {
+    & > div {
+      & > div:last-child {
+        margin-bottom: 3rem;
+      }
+    }
+  }
+
   @media screen and (max-width: 470px) {
     max-width: 100%;
   }

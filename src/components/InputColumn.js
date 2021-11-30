@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   StyledInputColumn,
   StyledTip,
@@ -6,17 +6,14 @@ import {
 } from "../styled/StyledInputColumn.styled";
 
 const InputColumn = (props) => {
-  const [billValue, setBillValue] = useState("");
   const [customTip, setCustomTip] = useState("");
-  const [noOfPeople, setNoOfPeople] = useState("");
-  const [currentTip, setCurrentTip] = useState(0);
 
   // Bill amount input listener
   const billInputListener = (e) => {
     let billInputAmount = parseFloat(e.target.value);
     let billInputAmountString = e.target.value;
     if (billInputAmount === "" || billInputAmount < 0) {
-      setBillValue("");
+      billInputAmount = "";
     }
 
     // Restore reset button functionality
@@ -26,14 +23,14 @@ const InputColumn = (props) => {
 
     // Add number limits on inputs
     if (billInputAmount > 9999.99 || billInputAmountString.includes("-")) {
-      billInputAmount = billValue;
+      billInputAmount = props.amounts.bill;
     }
 
     if (billInputAmountString.includes(".")) {
       let index = billInputAmountString.indexOf(".");
       let calcDecimals = billInputAmountString.length - index;
       if (calcDecimals > 3) {
-        billInputAmount = billValue;
+        billInputAmount = props.amounts.bill;
       }
     }
 
@@ -45,8 +42,11 @@ const InputColumn = (props) => {
       billInputAmount = billInputAmountString.replace("0", "");
     }
 
-    setBillValue(billInputAmount);
-    props.amounts.bill = billValue;
+    const currentAmountsCopy = { ...props.amounts };
+
+    currentAmountsCopy.bill = billInputAmount;
+
+    props.onAmountChange(currentAmountsCopy);
   };
 
   // Custom tip amount listener
@@ -54,11 +54,11 @@ const InputColumn = (props) => {
     let tipInputAmount = parseInt(e.target.value);
     let tipInputAmountString = e.target.value;
     if (e.target.focus) {
-      setCurrentTip(0);
+      setCustomTip(0);
     }
 
     if (tipInputAmount < 0 || tipInputAmount === "") {
-      setCustomTip(0);
+      tipInputAmount = 0;
     }
 
     // Restore reset button functionality
@@ -72,12 +72,12 @@ const InputColumn = (props) => {
       tipInputAmountString.includes("-") ||
       tipInputAmountString.length > 3
     ) {
-      tipInputAmount = customTip;
+      tipInputAmount = props.amounts.tip;
     }
 
     // Adjust current tip value
     if (tipInputAmountString.trim() !== "") {
-      setCurrentTip(tipInputAmount);
+      setCustomTip(tipInputAmount);
     }
 
     // Prevent number from starting with 0
@@ -89,7 +89,12 @@ const InputColumn = (props) => {
     }
 
     setCustomTip(tipInputAmount);
-    props.amounts.tip = currentTip;
+
+    const currentAmountsCopy = { ...props.amounts };
+
+    currentAmountsCopy.tip = customTip;
+
+    props.onAmountChange(currentAmountsCopy);
   };
 
   // Number of people input listener
@@ -108,7 +113,7 @@ const InputColumn = (props) => {
       noOfPeopleInputAmountString.includes("-") ||
       noOfPeopleInputAmountString.length > 2
     ) {
-      noOfPeopleInputAmount = noOfPeople;
+      noOfPeopleInputAmount = props.amounts.noOfPeople;
     }
 
     // Prevent number from starting with 0
@@ -119,9 +124,14 @@ const InputColumn = (props) => {
       noOfPeopleInputAmount = noOfPeopleInputAmountString.replace("0", "");
     }
 
-    setNoOfPeople(noOfPeopleInputAmount);
-    props.amounts.noOfPeople = noOfPeople;
+    const currentAmountsCopy = { ...props.amounts };
+
+    currentAmountsCopy.noOfPeople = noOfPeopleInputAmount;
+
+    props.onAmountChange(currentAmountsCopy);
   };
+
+  const tipSelectionHandler = (e) => {};
 
   return (
     <StyledInputColumn>
@@ -133,12 +143,12 @@ const InputColumn = (props) => {
           min="0"
           max="9999"
           onChange={billInputListener}
-          value={billValue}
+          value={props.amounts.bill}
         />
       </div>
       <div>
         <label>Select Tip %</label>
-        <StyledTipWrapper>
+        <StyledTipWrapper onClick={tipSelectionHandler}>
           <StyledTip data-tip="5">5%</StyledTip>
           <StyledTip data-tip="10">10%</StyledTip>
           <StyledTip data-tip="15">15%</StyledTip>
@@ -157,7 +167,9 @@ const InputColumn = (props) => {
       </div>
       <div
         className={`people-icon ${
-          noOfPeople === 0 || noOfPeople === "" ? "error-label" : ""
+          props.amounts.noOfPeople === 0 || props.amounts.noOfPeople === ""
+            ? "error-label"
+            : ""
         }`}
       >
         <label>Number of People</label>
@@ -166,7 +178,7 @@ const InputColumn = (props) => {
           placeholder="0"
           max="100"
           onChange={noOfPeopleInputListener}
-          value={noOfPeople}
+          value={props.amounts.noOfPeople}
         />
       </div>
     </StyledInputColumn>
