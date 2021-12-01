@@ -12,29 +12,47 @@ function App() {
     bill: "",
     noOfPeople: "",
   });
+  const [customTip, setCustomTip] = useState("");
 
   const changeCurrAmounts = (amounts) => {
     setCurrentAmounts(amounts);
   };
 
-  const btnIsEnabled = (isEnabled) => {
-    // if (isEnabled) {
-    //   return;
-    // } else {
-    //   setCurrentAmounts({
-    //     tip: "",
-    //     bill: "",
-    //     noOfPeople: "",
-    //   });
-    // }
+  const resetHandler = () => {
+    setCurrentAmounts({
+      tip: "",
+      bill: "",
+      noOfPeople: "",
+    });
+    setCustomTip("");
   };
+
+  const customTipHandler = (newCustomTip) => {
+    setCustomTip(newCustomTip);
+  };
+
+  const isResetEnabled =
+    currentAmounts.tip !== "" ||
+    currentAmounts.bill !== "" ||
+    currentAmounts.noOfPeople !== ""
+      ? true
+      : false;
 
   return (
     <div className="App">
       <Logo src={logo} alt="Logo" />
       <Container>
-        <InputColumn amounts={currentAmounts} onAmountChange={changeCurrAmounts} />
-        <TotalColumn currAmounts={currentAmounts} isEnabled={btnIsEnabled} />
+        <InputColumn
+          amounts={currentAmounts}
+          onAmountChange={changeCurrAmounts}
+          customTip={customTip}
+          onCustomTipChange={customTipHandler}
+        />
+        <TotalColumn
+          currAmounts={currentAmounts}
+          isResetEnabled={isResetEnabled}
+          onReset={resetHandler}
+        />
       </Container>
     </div>
   );

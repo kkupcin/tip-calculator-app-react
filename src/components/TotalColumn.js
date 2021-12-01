@@ -42,7 +42,7 @@ const TotalColumn = (props) => {
           ).toFixed(2)}`}</div>
         </div>
       </div>
-      <ResetButton isEnabled></ResetButton>
+      <ResetButton onReset={props.onReset} isResetEnabled={props.isResetEnabled}></ResetButton>
     </StyledTotalColumn>
   );
 };

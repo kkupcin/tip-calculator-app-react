@@ -2,12 +2,12 @@ import { StyledResetButton } from "../styled/StyledResetButton.styled";
 
 const ResetButton = (props) => {
   const resetFieldsHandler = () => {
-    props.isEnabled = false;
+    props.onReset();
   };
 
   return (
     <StyledResetButton
-      className={props.isEnabled ? "" : "disabled"}
+      className={props.isResetEnabled ? "" : "disabled"}
       onClick={resetFieldsHandler}
     >
       Reset
