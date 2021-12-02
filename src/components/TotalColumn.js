@@ -2,6 +2,7 @@ import { StyledTotalColumn } from "../styled/StyledTotalColumn.styled";
 import ResetButton from "./ResetButton";
 
 const TotalColumn = (props) => {
+  // Calculate total tip amount divided by number of people
   const calculateTip = () => {
     const billValue = parseFloat(props.currAmounts.bill) || 0;
     const tipValue = props.currAmounts.tip ? props.currAmounts.tip / 100 : 0;
@@ -10,6 +11,7 @@ const TotalColumn = (props) => {
     return (billValue * tipValue) / noOfPeopleValue;
   };
 
+  // Calculate total bill amount + tip divided by number of people
   const calculateTotal = () => {
     const billValue = parseFloat(props.currAmounts.bill) || 0;
     const tipValue = props.currAmounts.tip ? props.currAmounts.tip / 100 : 0;
@@ -17,8 +19,6 @@ const TotalColumn = (props) => {
 
     return (billValue + billValue * tipValue) / noOfPeopleValue;
   };
-
-  // CALCULATE TOTALS
 
   return (
     <StyledTotalColumn>
@@ -42,7 +42,10 @@ const TotalColumn = (props) => {
           ).toFixed(2)}`}</div>
         </div>
       </div>
-      <ResetButton onReset={props.onReset} isResetEnabled={props.isResetEnabled}></ResetButton>
+      <ResetButton
+        onReset={props.onReset}
+        isResetEnabled={props.isResetEnabled}
+      ></ResetButton>
     </StyledTotalColumn>
   );
 };

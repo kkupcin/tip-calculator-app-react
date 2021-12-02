@@ -1,6 +1,8 @@
 import { StyledResetButton } from "../styled/StyledResetButton.styled";
 
 const ResetButton = (props) => {
+
+  // Trigger reset function in App on click
   const resetFieldsHandler = () => {
     props.onReset();
   };

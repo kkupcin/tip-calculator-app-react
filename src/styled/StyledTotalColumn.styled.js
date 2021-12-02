@@ -52,5 +52,14 @@ export const StyledTotalColumn = styled.div`
 
   @media screen and (max-width: 470px) {
     max-width: 100%;
+
+    & > div {
+      & > div {
+        flex-direction: column;
+        justify-content: space-evenly;
+        align-items: flex-start;
+        margin-bottom: 1rem;
+      }
+    }
   }
 `;

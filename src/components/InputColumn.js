@@ -1,14 +1,19 @@
+import { useState } from "react";
 import {
   StyledInputColumn,
-  StyledTip,
   StyledTipWrapper,
 } from "../styled/StyledInputColumn.styled";
+import Tip from "./Tip";
 
 const InputColumn = (props) => {
+  const [errorShown, setErrorShown] = useState(false);
+
   // Bill amount input listener
   const billInputListener = (e) => {
     let billInputAmount = parseFloat(e.target.value);
     let billInputAmountString = e.target.value;
+
+    // Check if bill input is empty or smaller than zero
     if (billInputAmount === "" || billInputAmount < 0) {
       billInputAmount = 0;
     }
@@ -34,25 +39,26 @@ const InputColumn = (props) => {
       billInputAmount = billInputAmountString.replace("0", "");
     }
 
+    // Check if bill input value is NaN - if yes, reset it to an empty string
     if (isNaN(billInputAmount)) {
       billInputAmount = "";
     }
 
-    const currentAmountsCopy = { ...props.amounts };
-
-    currentAmountsCopy.bill = billInputAmount;
-
-    props.onAmountChange(currentAmountsCopy);
+    // Pass bill input value to App
+    props.onAmountChange({ ...props.amounts, bill: billInputAmount });
   };
 
   // Custom tip amount listener
   const customTipInputListener = (e) => {
     let tipInputAmount = parseInt(e.target.value);
     let tipInputAmountString = e.target.value;
+
+    // Check if custom tip is in focus
     if (e.target.focus) {
       props.onCustomTipChange(0);
     }
 
+    // Check if custom tip is smaller than 0 or empty
     if (tipInputAmount < 0 || tipInputAmount === "") {
       tipInputAmount = 0;
     }
@@ -79,17 +85,16 @@ const InputColumn = (props) => {
       tipInputAmount = tipInputAmountString.replace("0", "");
     }
 
+    // Pass custom tip back to App
     props.onCustomTipChange(tipInputAmount);
 
+    // Check if custom tip is NaN - if yes, reset it to an empty string
     if (isNaN(tipInputAmount)) {
       tipInputAmount = "";
     }
 
-    const currentAmountsCopy = { ...props.amounts };
-
-    currentAmountsCopy.tip = tipInputAmount;
-
-    props.onAmountChange(currentAmountsCopy);
+    // Pass tip amount to App
+    props.onAmountChange({ ...props.amounts, tip: tipInputAmount });
   };
 
   // Number of people input listener
@@ -114,35 +119,34 @@ const InputColumn = (props) => {
       noOfPeopleInputAmount = noOfPeopleInputAmountString.replace("0", "");
     }
 
+    // Check if number of people input value is NaN - if yes, reset to empty string
     if (isNaN(noOfPeopleInputAmount)) {
       noOfPeopleInputAmount = "";
     }
 
-    const currentAmountsCopy = { ...props.amounts };
+    // Check if error message needs to be added or removed on change
+    noOfPeopleInputErrorHandler(e);
 
-    currentAmountsCopy.noOfPeople = noOfPeopleInputAmount;
-
-    props.onAmountChange(currentAmountsCopy);
+    // Pass number of people back to App
+    props.onAmountChange({
+      ...props.amounts,
+      noOfPeople: noOfPeopleInputAmount,
+    });
   };
 
-  const tipSelectionHandler = (e) => {
-    const currentAmountsCopy = { ...props.amounts };
-    e.target.parentNode.childNodes.forEach((tip) => {
-      if (tip === e.target) {
-        e.target.classList.add("active");
-        currentAmountsCopy.tip = e.target.dataset.tip;
-      } else {
-        tip.classList.remove("active");
-      }
-      if (tip.tagName === "INPUT" && tip !== e.target) {
-        props.onCustomTipChange(0);
-      }
-    });
-    if (e.target.focus && e.target.tagName === "INPUT") {
-      currentAmountsCopy.tip = e.target.value;
+  // Number of people error handler - add class if no of people is 0 or empty after focus
+  const noOfPeopleInputErrorHandler = (e) => {
+    if (e.target.value === "" || parseFloat(e.target.value) === 0) {
+      setErrorShown(true);
+    } else if (e.target.value !== "" || parseFloat(e.target.value) !== 0) {
+      setErrorShown(false);
     }
+  };
 
-    props.onAmountChange(currentAmountsCopy);
+  // Check which tip was clicked, pass amount back to app and update custom tip to empty string
+  const tipClickHandler = (tip) => {
+    props.onAmountChange({ ...props.amounts, tip: tip });
+    props.onCustomTipChange("");
   };
 
   return (
@@ -160,12 +164,32 @@ const InputColumn = (props) => {
       </div>
       <div>
         <label>Select Tip %</label>
-        <StyledTipWrapper onClick={tipSelectionHandler}>
-          <StyledTip data-tip="5">5%</StyledTip>
-          <StyledTip data-tip="10">10%</StyledTip>
-          <StyledTip data-tip="15">15%</StyledTip>
-          <StyledTip data-tip="25">25%</StyledTip>
-          <StyledTip data-tip="50">50%</StyledTip>
+        <StyledTipWrapper>
+          <Tip
+            onTipClick={tipClickHandler}
+            selected={props.amounts.tip === "5"}
+            tip="5"
+          />
+          <Tip
+            onTipClick={tipClickHandler}
+            selected={props.amounts.tip === "10"}
+            tip="10"
+          />
+          <Tip
+            onTipClick={tipClickHandler}
+            selected={props.amounts.tip === "15"}
+            tip="15"
+          />
+          <Tip
+            onTipClick={tipClickHandler}
+            selected={props.amounts.tip === "25"}
+            tip="25"
+          />
+          <Tip
+            onTipClick={tipClickHandler}
+            selected={props.amounts.tip === "50"}
+            tip="50"
+          />
           <input
             className="custom-tip"
             placeholder="Custom"
@@ -177,15 +201,11 @@ const InputColumn = (props) => {
           />
         </StyledTipWrapper>
       </div>
-      <div
-        className={`people-icon ${
-          props.amounts.noOfPeople === 0 || props.amounts.noOfPeople === ""
-            ? "error-label"
-            : ""
-        }`}
-      >
+      <div className={`people-icon ${errorShown ? "error-label" : ""}`}>
         <label>Number of People</label>
         <input
+          onFocus={noOfPeopleInputErrorHandler}
+          onBlur={noOfPeopleInputErrorHandler}
           type="number"
           placeholder="0"
           max="100"

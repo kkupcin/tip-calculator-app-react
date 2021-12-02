@@ -14,10 +14,12 @@ function App() {
   });
   const [customTip, setCustomTip] = useState("");
 
+  // Receive input values from InputColumn and set as state
   const changeCurrAmounts = (amounts) => {
     setCurrentAmounts(amounts);
   };
 
+  // Reset the state to empty values if Reset button has been clicked
   const resetHandler = () => {
     setCurrentAmounts({
       tip: "",
@@ -27,10 +29,12 @@ function App() {
     setCustomTip("");
   };
 
+  // Receive custom tip value from InputColumn and set state
   const customTipHandler = (newCustomTip) => {
     setCustomTip(newCustomTip);
   };
 
+  // Check if Reset button needs to be enabled
   const isResetEnabled =
     currentAmounts.tip !== "" ||
     currentAmounts.bill !== "" ||
@@ -59,9 +63,3 @@ function App() {
 }
 
 export default App;
-
-// Components:
-// - main container
-// - input column
-//    - tip list + custom tip
-// - total box column
