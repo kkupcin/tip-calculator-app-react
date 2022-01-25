@@ -7,6 +7,8 @@
 
 ## Overview
 
+[View Live Demo](https://tip-calculator.kkupcin.com/)
+
 This tip calculator app takes in user input (bill amount, custom tip and number of people) and calculates the tip and total amount of the bill per person. You can also choose from predefined tip amounts.
 
 The app also includes a reset button to reset the input fields.
