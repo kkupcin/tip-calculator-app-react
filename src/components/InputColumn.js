@@ -13,7 +13,7 @@ const InputColumn = (props) => {
     let billInputAmount = parseFloat(e.target.value);
     let billInputAmountString = e.target.value;
 
-    // Check if bill input is empty or smaller than zero
+    // Reset bill amount to 0 if input is empty or less than 0
     if (billInputAmount === "" || billInputAmount < 0) {
       billInputAmount = 0;
     }
